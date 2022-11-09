@@ -1,27 +1,33 @@
-import pygame, sys
-class Button():
-    def __init__(self, screen, cord, imageWay, func):
-        self.screen = screen
-        self.image = pygame.image.load(imageWay)
-        self.rect = self.image.get_rect()
-        self.rect.x = cord[0]
-        self.rect.y = cord[1]
-        self.func = func
+import pygame
+
+
+class Button:
+    def __init__(self, screen, cord, image_way, function):
+        self.__screen = screen
+        self.__image = pygame.image.load(image_way)
+        self.__rect = self.__image.get_rect()
+        self.__rect.x = cord[0]
+        self.__rect.y = cord[1]
+        self._function = function
+
     def press(self, mouse):
-        if self.rect.x <= mouse[0] <= self.rect.x + self.rect.width and self.rect.y <= mouse[1] <= self.rect.y + self.rect.height:
-            self.func()
+        if self.__rect.x <= mouse[0] <= self.__rect.x + self.__rect.width \
+                and self.__rect.y <= mouse[1] <= self.__rect.y + self.__rect.height:
+            self._function()
+
     def out(self):
-        self.screen.blit(self.image, self.rect)
+        self.__screen.blit(self.__image, self.__rect)
 
-class ProgressBar():
+
+class ProgressBar:
     def __init__(self, screen, cord, size, color):
-        self.screen = screen
-        self.cord = cord
-        self.size = size
-        self.color = color
-        self.rect = [cord[0], cord[1], self.size[0], self.size[1]]
+        self.__screen = screen
+        self.__cord = cord
+        self.__size = size
+        self.__color = color
+        self.__rect = [cord[0], cord[1], self.__size[0], self.__size[1]]
 
-    def out(self, value, maxValue):
-        self.rect[2] = self.size[0] * (value/maxValue)
-        pygame.draw.rect(self.screen, self.color, self.rect)
+    def out(self, value, max_value):
+        self.__rect[2] = self.__size[0] * (value / max_value)
+        pygame.draw.rect(self.__screen, self.__color, self.__rect)
 

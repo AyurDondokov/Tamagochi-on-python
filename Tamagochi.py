@@ -1,75 +1,67 @@
-import pygame, math, sys
-import random
-import Controls
+import sys
 from Pet import *
 from Button import *
 
+# Game values
+GAME_NAME = "Tamagochi: Chicken Pet"
 WIDTH = 1080
 HEIGHT = 620
 FPS = 60
+SCREEN_COLOR = (234, 255, 208)
 
-#Pet values
-petHealth = 100
-petHappy = 100
+# Pet values
+PET_HEALTH = 100
+PET_HAPPY = 100
+PET_MOVING_SPEED = 10
+PET_FILE_WAY = "sprites/chicken.png"
 
-#Forces
-FoodForce = 15
-PlayForce = 15
+# Forces
+FOOD_FORCE = 15
+PLAY_FORCE = 15
 
-#Ways for files
-btnPlayWay = "sprites/btn_Play.png"
-btnFeedWay = "sprites/btn_Feed.png"
+# Ways for files
+BUTTON_PLAY_FILE_WAY = "sprites/btn_Play.png"
+BUTTON_FEED_FILE_WAY = "sprites/btn_Feed.png"
 
-#Position for UI
-btnPlayPos = (100, 150)
-btnFeedPos = (100, 20)
-PBHappyPos = (250, 170)
-PBHealthPos = (250, 40)
+# UI
+BUTTON_PLAY_POS = (100, 150)
+BUTTON_FEED_POS = (100, 20)
+PROGRESS_BAR_HAPPY_POS = (250, 170)
+PROGRESS_BAR_HEALTH_POS = (250, 40)
+PROGRESS_BAR_SIZE = (350, 70)
+PROGRESS_BAR_HAPPY_COLOR = (0, 205, 4)
+PROGRESS_BAR_HEALTH_COLOR = (234, 0, 0)
 
-PBSize = (350, 70)
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption(GAME_NAME)
+clock = pygame.time.Clock()
 
-PBHappyColor = (0, 205, 4)
-PBHealthColor = (234, 0, 0)
+chicken = Pet(screen, PET_FILE_WAY, PET_HEALTH, PET_HAPPY)
+btn_feed = Button(screen, BUTTON_FEED_POS, BUTTON_FEED_FILE_WAY, chicken.feed)
+btn_play = Button(screen, BUTTON_PLAY_POS, BUTTON_PLAY_FILE_WAY, chicken.play)
+pb_happy = ProgressBar(screen, PROGRESS_BAR_HAPPY_POS, PROGRESS_BAR_SIZE, PROGRESS_BAR_HAPPY_COLOR)
+pb_health = ProgressBar(screen, PROGRESS_BAR_HEALTH_POS, PROGRESS_BAR_SIZE, PROGRESS_BAR_HEALTH_COLOR)
 
-def Run():
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Chicken Pet!")
-    clock = pygame.time.Clock()
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            btn_feed.press(pygame.mouse.get_pos())
+            btn_play.press(pygame.mouse.get_pos())
 
-    screenColor = (234, 255, 208)
+    screen.fill(SCREEN_COLOR)
+    clock.tick(FPS)
 
-    chik = Pet(screen, "sprites/chicken.png", petHealth, petHappy)
-    btn_Feed = Button(screen, btnFeedPos, btnFeedWay, chik.feed)
-    btn_Play = Button(screen, btnPlayPos, btnPlayWay, chik.play)
-    pb_Happy = ProgressBar(screen, PBHappyPos, PBSize, PBHappyColor)
-    pb_Health = ProgressBar(screen, PBHealthPos, PBSize, PBHealthColor)
+    chicken.out()
+    chicken.moving_on_screen(PET_MOVING_SPEED)
+    chicken.starving()
+    chicken.sad()
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                btn_Feed.press(pygame.mouse.get_pos())
-                btn_Play.press(pygame.mouse.get_pos())
+    btn_feed.out()
+    btn_play.out()
 
-        screen.fill(screenColor)
-        clock.tick(FPS)
-
-        chik.out()
-        chik.moveTo(10)
-        chik.straving()
-        chik.sading()
-
-        btn_Feed.out()
-        btn_Play.out()
-
-        pb_Happy.out(chik.getHappy, chik.getMaxHappy)
-        pb_Health.out(chik.getHealth, chik.getMaxHealth)
-        pygame.display.flip()
-
-
-
-Run()
-
-pygame.quit()
+    pb_happy.out(chicken.get_happy, chicken.get_max_happy)
+    pb_health.out(chicken.get_health, chicken.get_max_health)
+    pygame.display.flip()
