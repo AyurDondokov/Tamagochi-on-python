@@ -1,6 +1,7 @@
 import sys
 from Pet import *
 from Button import *
+from pygame.locals import RESIZABLE
 
 # Game values
 GAME_NAME = "Tamagochi: Chicken Pet"
@@ -33,7 +34,7 @@ PROGRESS_BAR_HAPPY_COLOR = (0, 205, 4)
 PROGRESS_BAR_HEALTH_COLOR = (234, 0, 0)
 
 pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
+screen = pygame.display.set_mode((WIDTH, HEIGHT), RESIZABLE)
 pygame.display.set_caption(GAME_NAME)
 clock = pygame.time.Clock()
 
